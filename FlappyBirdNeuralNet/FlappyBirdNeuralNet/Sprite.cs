@@ -13,9 +13,9 @@ namespace FlappyBirdNeuralNet
         public Texture2D Image { get; set; }
         public Vector2 Position;
         public Color Tint { get; set; }
-        public float Scale { get; set; }
+        public Vector2 Scale;
         public Vector2 Origin { get; set; }
-        public Vector2 Size => new Vector2(Image.Width * Scale, Image.Height * Scale);
+        public Vector2 Size => new Vector2(Image.Width * Scale.X, Image.Height * Scale.Y);
         public Rectangle Hitbox => new Rectangle((int)(Position.X - Size.X / 2),
             (int)(Position.Y - Size.Y / 2), (int)(Size.X), (int)(Size.Y));
 
@@ -24,8 +24,8 @@ namespace FlappyBirdNeuralNet
             Image = image;
             Position = position;
             Tint = tint;
-            Scale = 1;
-            Origin = new Vector2(image.Width / 2, image.Height / 2);
+            Scale = Vector2.One;
+            Origin = new Vector2((float)image.Width / 2, (float)image.Height / 2);
         }
 
         public void Draw(SpriteBatch batch)

@@ -10,7 +10,7 @@ namespace FlappyBirdNeuralNet.NeuralNet
     {
         public Dendrite()
         {
-            var n = new Random(Environment.TickCount);
+            var n = new Random(Guid.NewGuid().GetHashCode());
             Weight = n.NextDouble();
         }
 
