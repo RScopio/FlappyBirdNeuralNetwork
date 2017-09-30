@@ -32,9 +32,13 @@ namespace FlappyBirdNeuralNet.NeuralNet
             }
         }
 
+        public NeuralNetwork(int[] layers) : this(0, layers)
+        {
+        }
+
         public List<Layer> Layers { get; set; }
         public double LearningRate { get; set; } // Non adaptive
-        public int LayerCount => LayerCount;
+        public int LayerCount => Layers.Count;
 
         private double Sigmoid(double x)
         {
@@ -137,6 +141,64 @@ namespace FlappyBirdNeuralNet.NeuralNet
 
 
             return true;
+        }
+
+        /// <summary>
+        /// Every dendrite has a chance of mutating to a new random value
+        /// </summary>
+        /// <param name="mutationRate">chance of mutation</param>
+        public void Mutate(double mutationRate)
+        {
+            var n = new Random(Guid.NewGuid().GetHashCode());
+            foreach (var layer in Layers)
+            {
+                foreach (var layerNeuron in layer.Neurons)
+                {
+                    // mutate some 'bias' information
+                    if (n.NextDouble() <= mutationRate)
+                    {
+                        layerNeuron.Bias = n.NextDouble();
+                    }
+
+                    // mutate some 'weights' information
+                    foreach (var layerNeuronDendrite in layerNeuron.Dendrites)
+                    {
+                        if (n.NextDouble() <= mutationRate)
+                        {
+                            layerNeuronDendrite.Weight = n.NextDouble();
+                        }
+                    }
+                }
+            }
+        }
+
+        public NeuralNetwork Crossover(NeuralNetwork other)
+        {
+            //create a child
+            int[] iLayer = new int[LayerCount];
+            for (int i = 0; i < LayerCount; i++)
+            {
+                iLayer[i] = Layers[i].NeuronCount;
+            }
+            NeuralNetwork child = new NeuralNetwork(iLayer);
+
+            //inherate from parents
+            Random n = new Random(Guid.NewGuid().GetHashCode());
+            for (int i = 1; i < LayerCount; i++)
+            {
+                var cutPoint = n.Next(0, Layers[i].NeuronCount);
+                // left side of cut point from this parent
+                for (int j = 0; j < cutPoint; j++)
+                {
+                    child.Layers[i].Neurons[j].Bias = Layers[i].Neurons[j].Bias;
+                }
+                // right side of cut point from other parent
+                for (int j = cutPoint; j < Layers[i].NeuronCount; j++)
+                {
+                    child.Layers[i].Neurons[j].Bias = other.Layers[i].Neurons[j].Bias;
+                }
+            }
+            return child;
         }
     }
 }

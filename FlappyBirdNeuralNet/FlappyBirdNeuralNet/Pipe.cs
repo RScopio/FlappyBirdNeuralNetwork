@@ -12,23 +12,29 @@ namespace FlappyBirdNeuralNet
     {
         public Sprite Top;
         public Sprite Bot;
+        public Vector2 Position;
 
-        public Pipe(Texture2D image, float position, Color tint, Viewport screen, float gap)
+        public Pipe(Texture2D image, float x, Color tint, Viewport screen, float gap)
         {
+            Position = Vector2.Zero;
             var n = new Random(Guid.NewGuid().GetHashCode());
             float port = n.Next(100, screen.Height - 100);
+            Position.Y = port;
 
             Top = new Sprite(image, Vector2.Zero, tint) { Scale = new Vector2(0.5f, 1) };
-            Top.Position = new Vector2(position, port - gap / 2 - Top.Size.Y / 2);
+            Top.Position = new Vector2(x, port - gap / 2 - Top.Size.Y / 2);
 
             Bot = new Sprite(image, Vector2.Zero, tint) { Scale = new Vector2(0.5f, 1) };
-            Bot.Position = new Vector2(position, port + gap / 2 + Bot.Size.Y / 2);
+            Bot.Position = new Vector2(x, port + gap / 2 + Bot.Size.Y / 2);
+
+            Position.X = x;
         }
 
         public void Update(float speed)
         {
-            Top.Position.X -= speed;
-            Bot.Position.X -= speed;
+            Position.X -= speed;
+            Top.Position.X = Position.X;
+            Bot.Position.X = Position.X;
         }
 
         public bool Intersects(Rectangle other)
