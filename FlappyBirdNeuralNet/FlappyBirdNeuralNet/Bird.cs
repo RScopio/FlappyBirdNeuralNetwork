@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using FlappyBirdNeuralNet.NeuralNet;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace FlappyBirdNeuralNet
 {
-    class Bird : Sprite
+    internal class Bird : Sprite
     {
         //NN
         public NeuralNetwork Brain;
 
-        public float Velocity { get; set; }
-        public float JumpPower { get; set; }
-        public bool Alive { get; set; }
-        public double Fitness => totalDistance - distanceToClosest;
+        private double distanceToClosest;
 
         private double totalDistance;
-        private double distanceToClosest;
 
         public Bird(Texture2D image, Vector2 position, Color tint, float jumpPower)
             : base(image, position, tint)
@@ -29,9 +21,14 @@ namespace FlappyBirdNeuralNet
             Velocity = 0;
             JumpPower = jumpPower;
             Scale = new Vector2(0.5f);
-            Brain = new NeuralNetwork(new[] { 2, 6, 1 });
+            Brain = new NeuralNetwork(new[] {2, 6, 1});
             totalDistance = 0;
         }
+
+        public float Velocity { get; set; }
+        public float JumpPower { get; set; }
+        public bool Alive { get; set; }
+        public double Fitness => totalDistance - distanceToClosest;
 
         public void Update(float gravity, List<Pipe> pipes, float pipeSpeed)
         {
@@ -44,24 +41,19 @@ namespace FlappyBirdNeuralNet
             //calculate input
             double horz = 0; //also acts as distance to closest
             double vert = 0;
-            for (int i = 0; i < pipes.Count; i++)
-            {
+            for (var i = 0; i < pipes.Count; i++)
                 if (pipes[i].Position.X + pipes[i].Top.Size.X > Position.X)
                 {
                     horz = pipes[i].Position.X - Position.X;
                     vert = pipes[i].Position.Y - Position.Y;
                     break;
                 }
-            }
             distanceToClosest = horz;
             var targetDeltaX = Normalize(horz, 1050);
             var targetDeltaY = Normalize(vert, 800);
-            double output = Brain.Run(new List<double> { targetDeltaX, targetDeltaY })[0];
+            var output = Brain.Run(new List<double> {targetDeltaX, targetDeltaY})[0];
             if (output > 0.5f)
-            {
                 Jump();
-            }
-
         }
 
         public void Jump()
@@ -80,9 +72,7 @@ namespace FlappyBirdNeuralNet
             if (value < -max) value = -max;
             else if (value > max) value = max;
 
-            return (value / max);
+            return value / max;
         }
-
-
     }
 }

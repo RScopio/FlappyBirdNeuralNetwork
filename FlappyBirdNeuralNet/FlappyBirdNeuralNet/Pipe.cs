@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace FlappyBirdNeuralNet
 {
-    class Pipe
+    internal class Pipe
     {
-        public Sprite Top;
         public Sprite Bot;
         public Vector2 Position;
+        public Sprite Top;
 
         public Pipe(Texture2D image, float x, Color tint, Viewport screen, float gap)
         {
@@ -21,10 +17,10 @@ namespace FlappyBirdNeuralNet
             float port = n.Next(100, screen.Height - 100);
             Position.Y = port;
 
-            Top = new Sprite(image, Vector2.Zero, tint) { Scale = new Vector2(0.5f, 1) };
+            Top = new Sprite(image, Vector2.Zero, tint) {Scale = new Vector2(0.5f, 1)};
             Top.Position = new Vector2(x, port - gap / 2 - Top.Size.Y / 2);
 
-            Bot = new Sprite(image, Vector2.Zero, tint) { Scale = new Vector2(0.5f, 1) };
+            Bot = new Sprite(image, Vector2.Zero, tint) {Scale = new Vector2(0.5f, 1)};
             Bot.Position = new Vector2(x, port + gap / 2 + Bot.Size.Y / 2);
 
             Position.X = x;
@@ -47,6 +43,5 @@ namespace FlappyBirdNeuralNet
             Top.Draw(batch);
             Bot.Draw(batch);
         }
-
     }
 }
