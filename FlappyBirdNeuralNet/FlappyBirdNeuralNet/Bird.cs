@@ -46,7 +46,7 @@ namespace FlappyBirdNeuralNet
             double vert = 0;
             for (int i = 0; i < pipes.Count; i++)
             {
-                if (pipes[i].Position.X > Position.X)
+                if (pipes[i].Position.X + pipes[i].Top.Size.X > Position.X)
                 {
                     horz = pipes[i].Position.X - Position.X;
                     vert = pipes[i].Position.Y - Position.Y;
@@ -54,10 +54,9 @@ namespace FlappyBirdNeuralNet
                 }
             }
             distanceToClosest = horz;
-            var targetDeltaX = Normalize(horz, 900);
-            var targetDeltaY = Normalize(vert, 900);
+            var targetDeltaX = Normalize(horz, 1050);
+            var targetDeltaY = Normalize(vert, 800);
             double output = Brain.Run(new List<double> { targetDeltaX, targetDeltaY })[0];
-            Console.WriteLine(output);
             if (output > 0.5f)
             {
                 Jump();
@@ -73,6 +72,7 @@ namespace FlappyBirdNeuralNet
         public void ResetTotal()
         {
             totalDistance = 0;
+            distanceToClosest = 0;
         }
 
         public double Normalize(double value, double max)

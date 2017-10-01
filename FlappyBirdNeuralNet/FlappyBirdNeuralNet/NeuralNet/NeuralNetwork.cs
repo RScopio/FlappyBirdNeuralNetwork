@@ -157,7 +157,7 @@ namespace FlappyBirdNeuralNet.NeuralNet
                     // mutate some 'bias' information
                     if (n.NextDouble() <= mutationRate)
                     {
-                        layerNeuron.Bias = n.NextDouble();
+                        layerNeuron.Bias = n.Next(-1, 1) + n.NextDouble();
                     }
 
                     // mutate some 'weights' information
@@ -165,7 +165,7 @@ namespace FlappyBirdNeuralNet.NeuralNet
                     {
                         if (n.NextDouble() <= mutationRate)
                         {
-                            layerNeuronDendrite.Weight = n.NextDouble();
+                            layerNeuronDendrite.Weight = n.Next(-1, 1) + n.NextDouble();
                         }
                     }
                 }
