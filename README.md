@@ -1,0 +1,26 @@
+# FlappyBirdNeuralNetwork
+ - Natural
+ - Artificial
+ - Activations
+     - Binary Step
+     - Sigmoid = 1 / 1-e^-x
+     - TanH
+ - Structure
+     - Neuron, Bias
+     - Dentrite
+     - Layer
+ - Build int[]
+ - Run
+     - for every layer, for every neuron
+     - value = summation of previous layers value * weight of each previous layers 
+     - value = sigmoid(value +_ bias)
+ - Training
+     - Supervised Training
+         - BackPropogation
+         - Move by learning rate
+     - Genetic Training
+         - Kill off
+         - Breed off
+         - mutate
+ - Evaluation
+     - Convex Optimization
