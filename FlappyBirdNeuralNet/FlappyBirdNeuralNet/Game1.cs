@@ -41,6 +41,7 @@ namespace FlappyBirdNeuralNet
         protected override void Initialize()
         {
             screen = GraphicsDevice.Viewport;
+            IsMouseVisible = true;
             base.Initialize();
         }
 
@@ -53,8 +54,8 @@ namespace FlappyBirdNeuralNet
             birdImage = Content.Load<Texture2D>("circle");
 
             generation = 1;
-            for (var i = 0; i < 32; i++)
-                birds.Add(new Bird(birdImage, new Vector2(200, (float) screen.Height / 2), Color.Blue, jumpPower));
+            for (var i = 0; i < 1000; i++)
+                birds.Add(new Bird(birdImage, new Vector2(200, (float)screen.Height / 2), Color.Blue, jumpPower));
             bestBird = birds[0];
             lastBest = bestBird;
 
@@ -144,7 +145,7 @@ namespace FlappyBirdNeuralNet
                             bird.Brain.Mutate(0.25f);
 
                         //reset bird
-                        bird.Position = new Vector2(200, (float) screen.Height / 2);
+                        bird.Position = new Vector2(200, (float)screen.Height / 2);
                         bird.Alive = true;
                         bird.ResetTotal();
                     }
@@ -175,14 +176,17 @@ namespace FlappyBirdNeuralNet
             index = 0;
             foreach (var bird in birds)
             {
-                bird.Draw(spriteBatch);
-                spriteBatch.DrawString(font, $"Fitness: {bird.Fitness}", new Vector2(0, dy), Color.White);
-                spriteBatch.DrawString(font, $"{index}", bird.Position, Color.White);
-                dy += 25;
+                if (bird.Alive)
+                {
+                    bird.Draw(spriteBatch);
+                    spriteBatch.DrawString(font, $"Fitness: {bird.Fitness}", new Vector2(0, dy), Color.White);
+                    spriteBatch.DrawString(font, $"{index}", bird.Position, Color.White);
+                    dy += 25;
+                }
                 index++;
             }
 
-            spriteBatch.DrawString(font, $"Generation: {generation}", new Vector2((float) screen.Width / 2, 0),
+            spriteBatch.DrawString(font, $"Generation: {generation}", new Vector2((float)screen.Width / 2, 0),
                 Color.White);
 
             spriteBatch.End();
